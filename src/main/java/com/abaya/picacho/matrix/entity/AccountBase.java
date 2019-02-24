@@ -12,7 +12,7 @@ import javax.persistence.*;
 public class AccountBase {
   @Id
   @GeneratedValue(strategy = GenerationType.AUTO)
-  protected Long key;
+  protected Long id;
 
   protected String username;
   protected String password;

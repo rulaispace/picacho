@@ -6,7 +6,7 @@ import com.abaya.picacho.matrix.model.NestedListNode;
 public class NestedListNodeHelper {
   public static NestedListNode setNormalProperty(NestedListNode target, Organization organization) {
     target.setLevel(organization.getLevel());
-    target.setKey(organization.getKey());
+    target.setId(organization.getId());
     target.setType(organization.getType());
     target.setPrimaryText(organization.getName());
     target.setSecondaryText(organization.getDescription());

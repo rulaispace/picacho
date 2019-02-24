@@ -14,7 +14,7 @@ import java.util.Date;
 public class Resource {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Long key;
+    protected Long id;
 
     private String name;
     private String code;

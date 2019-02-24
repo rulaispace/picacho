@@ -76,12 +76,12 @@ public class ApplicationTest {
                 String key = findInContainer(line, container);
                 if (key == null) continue;
 
-                // System.out.println("FILE[" + path + "], LINE[" + line.trim() + "], PATH[" + container.get(key) + "]" );
+                // System.out.println("FILE[" + path + "], LINE[" + line.trim() + "], PATH[" + container.get(id) + "]" );
 
 
                 if (upperLowerCaseIssue(line, container.get(key))) {
                     System.out.println("FILE[" + path + "], LINE[" + line.trim() + "], PATH[" + container.get(key) + "]" );
-                    // System.out.println("(" + path + ", " + line.trim() + "\r\nPATH    " + container.get(key) );
+                    // System.out.println("(" + path + ", " + line.trim() + "\r\nPATH    " + container.get(id) );
                     // System.out.println("----------");
                 }
             }

@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class NestedListNode {
-  private Long key;
+  private Long id;
   private int level;
   private String type;
   private String primaryText;
@@ -33,7 +33,7 @@ public class NestedListNode {
   @Override
   public String toString() {
     return "NestedListNode{" +
-      "key=" + key +
+      "id=" + id +
       ", level='" + level + '\'' +
       ", type='" + type + '\'' +
       ", primaryText='" + primaryText + '\'' +

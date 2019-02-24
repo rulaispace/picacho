@@ -12,7 +12,7 @@ import javax.persistence.Id;
 public class Document {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Long key;
+    protected Long id;
 
     private String title;
 

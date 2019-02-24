@@ -14,7 +14,7 @@ import java.util.Date;
 public class Regulation {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long key;
+    private Long id;
 
     private String name;
     private String type;

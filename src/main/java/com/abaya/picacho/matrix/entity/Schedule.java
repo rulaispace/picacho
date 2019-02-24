@@ -12,7 +12,7 @@ import javax.persistence.Id;
 public class Schedule {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected Long key;
+    protected Long id;
 
     private int time;
     private String event;
