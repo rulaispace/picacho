@@ -3,6 +3,7 @@ package com.abaya.picacho.matrix.controller;
 
 import com.abaya.picacho.matrix.entity.Account;
 import com.abaya.picacho.matrix.entity.AccountBase;
+import com.abaya.picacho.matrix.model.Response;
 import com.abaya.picacho.matrix.service.AccountService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,11 @@ public class AccountController {
     @CrossOrigin
     @ResponseBody
     @RequestMapping(value = "login")
-    public Account login(@RequestBody AccountBase request) throws Exception {
-        return service.login(request.getUsername(), request.getPassword());
+    public Response<Account> login(@RequestBody AccountBase request) throws Exception {
+        Account account = service.login(request.getUsername(), request.getPassword());
+        if (account != null) return Response.success(account);
+        if (account == null) return Response.fail("该用户不存在!");
+
+        return Response.fail("系统内部错误");
     }
 }

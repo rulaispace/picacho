@@ -1,4 +1,4 @@
-package com.abaya.picacho.matrix.repository;
+package com.abaya.picacho.org.repository;
 
 import com.abaya.picacho.matrix.entity.Organization;
 import org.springframework.data.repository.CrudRepository;

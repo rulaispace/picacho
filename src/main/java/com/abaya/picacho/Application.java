@@ -2,10 +2,10 @@ package com.abaya.picacho;
 
 import com.abaya.picacho.matrix.entity.*;
 import com.abaya.picacho.matrix.repository.*;
+import com.abaya.picacho.org.repository.OrganizationRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
 
@@ -15,7 +15,7 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    @Bean
+    // @Bean
     public CommandLineRunner createAdminAccount(AccountRepository repository) {
         return (args) -> {
           Account account = new Account("admin", "admin", "管理员", "admin");
@@ -26,7 +26,7 @@ public class Application {
         };
     }
 
-    @Bean
+    // @Bean
     public CommandLineRunner createNotifications(NotificationRepository repository) {
         return (args) -> {
             Notification notification = new Notification("春节放假通知", "变更", "王小二", new Date());
@@ -37,7 +37,7 @@ public class Application {
         };
     }
 
-    @Bean
+    // @Bean
     public CommandLineRunner createSchedule(ScheduleRepository repository) {
         return (args) -> {
             Schedule schedule = new Schedule(8, "晨会");
@@ -50,7 +50,7 @@ public class Application {
         };
     }
 
-    @Bean
+    // @Bean
     public CommandLineRunner createDocument(DocumentRepository repository) {
         return (args) -> {
             for (int i=0; i<10; i++) {
@@ -60,7 +60,7 @@ public class Application {
         };
     }
 
-    @Bean
+    // @Bean
     public CommandLineRunner createOrganization(OrganizationRepository repository) {
         return (args) -> {
             Organization organization = new Organization(0, "ROOT", null, "department", "公司", "公司根节点");
@@ -83,7 +83,7 @@ public class Application {
         };
     }
 
-    @Bean
+    // @Bean
     public CommandLineRunner createResource(ResourceRepository repository) {
         return args -> {
             for (int i=0; i<6; i++) {
@@ -93,7 +93,7 @@ public class Application {
         };
     }
 
-    @Bean
+    // @Bean
     public CommandLineRunner createAnnouncement(AnnouncementRepository repository) {
         return args -> {
             Announcement announcement = new Announcement("春假放假通知", "通知", "在途", new Date());
@@ -104,7 +104,7 @@ public class Application {
         };
     }
 
-    @Bean
+    // @Bean
     public CommandLineRunner createRegulation(RegulationRepository repository) {
         return args -> {
             Regulation regulation = new Regulation("请假制度", "人事制度", "在途", new Date());
