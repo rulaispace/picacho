@@ -2,6 +2,7 @@ package com.abaya.picacho.org.controller;
 
 import com.abaya.picacho.matrix.model.NestedListNode;
 import com.abaya.picacho.matrix.model.Response;
+import com.abaya.picacho.org.model.OrgAddRequest;
 import com.abaya.picacho.org.service.OrganizationService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,8 +28,11 @@ public class OrganizationController {
   @CrossOrigin
   @ResponseBody
   @RequestMapping(value = "org/add")
-  public Response<NestedListNode> addOrganization() throws Exception {
-    return Response.success(service.queryOrganizationAsTree());
+  public Response<NestedListNode> addOrganization(@RequestBody OrgAddRequest request) throws Exception {
+    NestedListNode payload = service.addOrganization(request);
+    if (payload == null) return Response.fail("更新失败");
+
+    return Response.success(payload);
   }
 
   @CrossOrigin

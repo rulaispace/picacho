@@ -1,9 +1,10 @@
 package com.abaya.picacho.org.biz;
 
-import com.abaya.picacho.matrix.entity.Organization;
+import com.abaya.picacho.org.entity.Organization;
 import com.abaya.picacho.matrix.model.NestedListNode;
 import com.abaya.picacho.org.util.NestedListNodeHelper;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ public class NestedListConverter {
     createChain();
     createNodes();
     findRoot();
+    sort();
   }
 
   private void index() {
@@ -99,6 +101,19 @@ public class NestedListConverter {
         this.root = nestedListNode;
         return ;
       }
+    }
+  }
+
+  private void sort() {
+    sort(root.getChildren());
+  }
+
+  private void sort(List<NestedListNode> nodes) {
+    if (nodes == null) return ;
+
+    Collections.sort(nodes);
+    for (NestedListNode node : nodes) {
+      sort(node.getChildren());
     }
   }
 

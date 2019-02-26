@@ -1,4 +1,4 @@
-package com.abaya.picacho.matrix.entity;
+package com.abaya.picacho.org.entity;
 
 import lombok.Data;
 

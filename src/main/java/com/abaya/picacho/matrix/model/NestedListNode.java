@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class NestedListNode {
+public class NestedListNode implements Comparable<NestedListNode> {
   private Long id;
   private int level;
   private String type;
@@ -39,5 +39,18 @@ public class NestedListNode {
       ", primaryText='" + primaryText + '\'' +
       ", secondaryText='" + secondaryText + '\'' +
       '}';
+  }
+
+  @Override
+  public int compareTo(NestedListNode another) {
+    if (this.type.equals(another.type)) {
+      return (int)(this.id - another.id);
+    }
+
+    if ("department".equals(this.type)) {
+      return -1;
+    }
+
+    return 1;
   }
 }

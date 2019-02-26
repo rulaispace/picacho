@@ -1,6 +1,6 @@
 package com.abaya.picacho.org.util;
 
-import com.abaya.picacho.matrix.entity.Organization;
+import com.abaya.picacho.org.entity.Organization;
 import com.abaya.picacho.matrix.model.NestedListNode;
 
 public class NestedListNodeHelper {

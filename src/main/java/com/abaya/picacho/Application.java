@@ -2,6 +2,7 @@ package com.abaya.picacho;
 
 import com.abaya.picacho.matrix.entity.*;
 import com.abaya.picacho.matrix.repository.*;
+import com.abaya.picacho.org.entity.Organization;
 import com.abaya.picacho.org.repository.OrganizationRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
