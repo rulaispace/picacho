@@ -11,5 +11,5 @@ public class OrgAddRequest {
     private long parentId;
     private String primaryText;
     private String secondaryText;
-    private String type;
+    private NodeType type;
 }

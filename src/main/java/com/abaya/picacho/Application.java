@@ -1,12 +1,17 @@
 package com.abaya.picacho;
 
-import com.abaya.picacho.matrix.entity.*;
-import com.abaya.picacho.matrix.repository.*;
+import com.abaya.picacho.common.entity.*;
+import com.abaya.picacho.common.repository.*;
 import com.abaya.picacho.org.entity.Organization;
+import com.abaya.picacho.org.model.NodeType;
 import com.abaya.picacho.org.repository.OrganizationRepository;
+import com.abaya.picacho.user.entity.Account;
+import com.abaya.picacho.user.model.Rule;
+import com.abaya.picacho.user.repository.AccountRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 import java.util.Date;
 
@@ -17,12 +22,12 @@ public class Application {
     }
 
     // @Bean
-    public CommandLineRunner createAdminAccount(AccountRepository repository) {
+    public CommandLineRunner createDefaultAccount(AccountRepository repository) {
         return (args) -> {
-          Account account = new Account("admin", "admin", "管理员", "admin");
+          Account account = new Account("admin", "admin", "管理员", Rule.admin);
           repository.save(account);
 
-          account = new Account("zhangsan", "zhangsan", "张三", "user");
+          account = new Account("zhangsan", "zhangsan", "张三", Rule.employee);
           repository.save(account);
         };
     }
@@ -61,25 +66,25 @@ public class Application {
         };
     }
 
-    // @Bean
+    @Bean
     public CommandLineRunner createOrganization(OrganizationRepository repository) {
         return (args) -> {
-            Organization organization = new Organization(0, "ROOT", null, "department", "公司", "公司根节点");
+            Organization organization = new Organization(0, "ROOT", null, NodeType.department, "公司", "公司根节点");
             repository.save(organization);
 
-            organization = new Organization(1, "JSB", "ROOT", "department", "技术部", "负责开发工作");
+            organization = new Organization(1, "JSB", "ROOT", NodeType.department, "技术部", "负责开发工作");
             repository.save(organization);
 
-            organization = new Organization(1, "RLZYB", "ROOT", "department", "人力资源部", "招聘、薪酬、培训");
+            organization = new Organization(1, "RLZYB", "ROOT", NodeType.department, "人力资源部", "招聘、薪酬、培训");
             repository.save(organization);
 
-            organization = new Organization(2, "RLZYB-XCS", "RLZYB", "department", "人力资源部薪酬室", "薪酬");
+            organization = new Organization(2, "RLZYB-XCS", "RLZYB", NodeType.department, "人力资源部薪酬室", "薪酬");
             repository.save(organization);
 
-            organization = new Organization(1, "BGS", "ROOT", "department", "办公室", "负责相关行政事宜");
+            organization = new Organization(1, "BGS", "ROOT", NodeType.department, "办公室", "负责相关行政事宜");
             repository.save(organization);
 
-            organization = new Organization(2, "ZHANGSAN", "BGS", "employee", "张三", "办公室主任");
+            organization = new Organization(2, "ZHANGSAN", "BGS", NodeType.employee, "张三", "办公室主任");
             repository.save(organization);
         };
     }

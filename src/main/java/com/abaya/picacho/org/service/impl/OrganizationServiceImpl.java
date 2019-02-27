@@ -1,43 +1,46 @@
 package com.abaya.picacho.org.service.impl;
 
 import com.abaya.picacho.org.entity.Organization;
-import com.abaya.picacho.matrix.model.NestedListNode;
-import com.abaya.picacho.org.biz.NestedListConverter;
 import com.abaya.picacho.org.model.OrgAddRequest;
+import com.abaya.picacho.org.model.OrgNode;
 import com.abaya.picacho.org.repository.OrganizationRepository;
+import com.abaya.picacho.org.service.OrgNodeConvertService;
 import com.abaya.picacho.org.service.OrganizationService;
-import com.abaya.picacho.org.util.NestedListNodeHelper;
+import com.abaya.picacho.org.util.OrgNodeHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
   @Autowired
+  private OrgNodeConvertService service;
+
+  @Autowired
   private OrganizationRepository repository;
 
 
   @Override
-  public NestedListNode queryOrganizationAsTree() {
-    return new NestedListConverter(repository.findAll()).get();
+  public OrgNode queryOrganizationAsTree() {
+    return service.convert(repository.findAll());
   }
 
   @Override
-  public NestedListNode updateOrganization(NestedListNode node) {
+  public OrgNode updateOrganization(OrgNode node) {
     Organization organization = repository.findById(node.getId()).get();
     organization.setName(node.getPrimaryText());
     organization.setDescription(node.getSecondaryText());
 
-    return NestedListNodeHelper.create(repository.save(organization));
+    return OrgNodeHelper.create(repository.save(organization));
   }
 
   @Override
-  public NestedListNode addOrganization(OrgAddRequest request) {
+  public OrgNode addOrganization(OrgAddRequest request) {
     Organization parent = repository.findById(request.getParentId()).get();
     if (parent == null) return null;
 
     Organization organization = new Organization();
     organization.setLevel(parent.getLevel() + 1);
-    organization.setParentOrgId(parent.getOrgId());
+    organization.setParentCode(parent.getCode());
     organization.setName(request.getPrimaryText());
     organization.setDescription(request.getSecondaryText());
     organization.setType(request.getType());
@@ -45,7 +48,7 @@ public class OrganizationServiceImpl implements OrganizationService {
     organization = repository.save(organization);
 
     // update org id using id
-    organization.setOrgId(Long.toString(organization.getId()));
-    return NestedListNodeHelper.create(repository.save(organization));
+    organization.setCode(Long.toString(organization.getId()));
+    return OrgNodeHelper.create(repository.save(organization));
   }
 }

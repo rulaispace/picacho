@@ -1,10 +1,10 @@
 package com.abaya.picacho.org.service;
 
-import com.abaya.picacho.matrix.model.NestedListNode;
 import com.abaya.picacho.org.model.OrgAddRequest;
+import com.abaya.picacho.org.model.OrgNode;
 
 public interface OrganizationService {
-  NestedListNode queryOrganizationAsTree();
-  NestedListNode updateOrganization(NestedListNode node);
-  NestedListNode addOrganization(OrgAddRequest request);
+  OrgNode queryOrganizationAsTree();
+  OrgNode updateOrganization(OrgNode node);
+  OrgNode addOrganization(OrgAddRequest request);
 }

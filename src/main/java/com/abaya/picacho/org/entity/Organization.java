@@ -1,35 +1,39 @@
 package com.abaya.picacho.org.entity;
 
+import com.abaya.picacho.org.model.NodeType;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Data
 @Entity
 public class Organization {
-  @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  protected Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    protected Long id;
 
-  private int level;
-  private String orgId;
-  private String parentOrgId;
-  private String type;
-  private String name;
-  private String description;
+    private int level;
 
-  public Organization() {}
+    @Column(unique=true)
+    private String code;
+    private String parentCode;
 
-  public Organization(int level, String orgId, String parentOrgId, String type, String name, String description) {
-    this.level = level;
-    this.orgId = orgId;
-    this.parentOrgId = parentOrgId;
-    this.type = type;
-    this.name = name;
-    this.description = description;
-  }
+    @Enumerated(EnumType.STRING)
+    private NodeType type;
+
+    private String name;
+    private String description;
+
+    public Organization() {
+    }
+
+    public Organization(int level, String code, String parentCode, NodeType type, String name, String description) {
+        this.level = level;
+        this.code = code;
+        this.parentCode = parentCode;
+        this.type = type;
+        this.name = name;
+        this.description = description;
+    }
 
 }
