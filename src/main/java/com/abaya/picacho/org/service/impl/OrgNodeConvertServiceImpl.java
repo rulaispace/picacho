@@ -1,8 +1,8 @@
 package com.abaya.picacho.org.service.impl;
 
-import com.abaya.picacho.common.model.Node;
+import com.abaya.picacho.common.model.TreeNode;
 import com.abaya.picacho.org.entity.Organization;
-import com.abaya.picacho.org.model.NodeType;
+import com.abaya.picacho.org.model.OrgType;
 import com.abaya.picacho.org.model.OrgNode;
 import com.abaya.picacho.org.service.OrgNodeConvertService;
 import com.abaya.picacho.org.util.OrgNodeHelper;
@@ -64,7 +64,7 @@ public class OrgNodeConvertServiceImpl implements OrgNodeConvertService {
             OrgNodeHelper.setNormalProperty(node, organization);
             result.add(node);
 
-            if (organization.getType() != NodeType.employee) return ;
+            if (organization.getType() != OrgType.employee) return ;
 
             Account account = repository.findByUsernameIgnoreCase(organization.getCode());
             if (account == null) return ;
@@ -84,7 +84,7 @@ public class OrgNodeConvertServiceImpl implements OrgNodeConvertService {
 
     private void setChildrenReference(List<OrgNode> nodeList) {
         for (int i = 0; i < nodeList.size(); i++) {
-            Node parent = nodeList.get(i).getParent();
+            TreeNode parent = nodeList.get(i).getParent();
             if (parent == null) continue;
             parent.addChild(nodeList.get(i));
         }
@@ -103,11 +103,11 @@ public class OrgNodeConvertServiceImpl implements OrgNodeConvertService {
         sort(root.getChildren());
     }
 
-    private void sort(List<Node> nodeList) {
+    private void sort(List<TreeNode> nodeList) {
         if (nodeList == null) return;
 
         Collections.sort(nodeList);
-        for (Node node : nodeList) {
+        for (TreeNode node : nodeList) {
             sort(node.getChildren());
         }
     }

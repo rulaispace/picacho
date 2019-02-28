@@ -9,4 +9,5 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
   List<Account> findAll();
   Account findByUsernameIgnoreCase(String userName);
   Account findByUsername(String userName);
+  Account findByToken(String token);
 }

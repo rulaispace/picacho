@@ -6,5 +6,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
 public interface OrganizationRepository extends CrudRepository<Organization, Long> {
-  List<Organization> findAll();
+    List<Organization> findAll();
+    Organization findByCode(String code);
 }

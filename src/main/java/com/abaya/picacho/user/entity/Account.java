@@ -11,6 +11,8 @@ public class Account extends AccountBase {
   private static final String ROOT_DEPARTMENT = "总公司";
 
   private String name;
+
+  @Enumerated(EnumType.STRING)
   private Rule rule = Rule.employee;
   private String department = ROOT_DEPARTMENT;
 

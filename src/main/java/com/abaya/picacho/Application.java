@@ -1,49 +1,50 @@
 package com.abaya.picacho;
 
-import com.abaya.picacho.common.entity.*;
-import com.abaya.picacho.common.repository.*;
+import com.abaya.picacho.biz.entity.*;
 import com.abaya.picacho.org.entity.Organization;
-import com.abaya.picacho.org.model.NodeType;
+import com.abaya.picacho.org.model.OrgType;
 import com.abaya.picacho.org.repository.OrganizationRepository;
 import com.abaya.picacho.user.entity.Account;
 import com.abaya.picacho.user.model.Rule;
-import com.abaya.picacho.user.repository.AccountRepository;
+import com.abaya.picacho.user.repository.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @SpringBootApplication
+@EnableCaching
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
     }
 
-    // @Bean
+    @Bean
     public CommandLineRunner createDefaultAccount(AccountRepository repository) {
         return (args) -> {
-          Account account = new Account("admin", "admin", "管理员", Rule.admin);
+          Account account = new Account("ADMIN", "admin", "管理员", Rule.admin);
           repository.save(account);
 
-          account = new Account("zhangsan", "zhangsan", "张三", Rule.employee);
+          account = new Account("ZHANGSAN", "zhangsan", "张三", Rule.employee);
           repository.save(account);
         };
     }
 
-    // @Bean
+    @Bean
     public CommandLineRunner createNotifications(NotificationRepository repository) {
         return (args) -> {
-            Notification notification = new Notification("春节放假通知", "变更", "王小二", new Date());
+            Notification notification = new Notification("春节放假通知", "变更", "王小二", LocalDateTime.now());
             repository.save(notification);
 
-            notification = new Notification("内部管理会会议纪要", "通知", "张小三", new Date());
+            notification = new Notification("内部管理会会议纪要", "通知", "张小三", LocalDateTime.now());
             repository.save(notification);
         };
     }
 
-    // @Bean
+    @Bean
     public CommandLineRunner createSchedule(ScheduleRepository repository) {
         return (args) -> {
             Schedule schedule = new Schedule(8, "晨会");
@@ -56,7 +57,7 @@ public class Application {
         };
     }
 
-    // @Bean
+    @Bean
     public CommandLineRunner createDocument(DocumentRepository repository) {
         return (args) -> {
             for (int i=0; i<10; i++) {
@@ -69,54 +70,54 @@ public class Application {
     @Bean
     public CommandLineRunner createOrganization(OrganizationRepository repository) {
         return (args) -> {
-            Organization organization = new Organization(0, "ROOT", null, NodeType.department, "公司", "公司根节点");
+            Organization organization = new Organization(0, "ROOT", null, OrgType.department, "公司", "公司根节点");
             repository.save(organization);
 
-            organization = new Organization(1, "JSB", "ROOT", NodeType.department, "技术部", "负责开发工作");
+            organization = new Organization(1, "JSB", "ROOT", OrgType.department, "技术部", "负责开发工作");
             repository.save(organization);
 
-            organization = new Organization(1, "RLZYB", "ROOT", NodeType.department, "人力资源部", "招聘、薪酬、培训");
+            organization = new Organization(1, "RLZYB", "ROOT", OrgType.department, "人力资源部", "招聘、薪酬、培训");
             repository.save(organization);
 
-            organization = new Organization(2, "RLZYB-XCS", "RLZYB", NodeType.department, "人力资源部薪酬室", "薪酬");
+            organization = new Organization(2, "RLZYB-XCS", "RLZYB", OrgType.department, "人力资源部薪酬室", "薪酬");
             repository.save(organization);
 
-            organization = new Organization(1, "BGS", "ROOT", NodeType.department, "办公室", "负责相关行政事宜");
+            organization = new Organization(1, "BGS", "ROOT", OrgType.department, "办公室", "负责相关行政事宜");
             repository.save(organization);
 
-            organization = new Organization(2, "ZHANGSAN", "BGS", NodeType.employee, "张三", "办公室主任");
+            organization = new Organization(2, "ZHANGSAN", "BGS", OrgType.employee, "张三", "办公室主任");
             repository.save(organization);
         };
     }
 
-    // @Bean
+    @Bean
     public CommandLineRunner createResource(ResourceRepository repository) {
         return args -> {
             for (int i=0; i<6; i++) {
-                Resource resource = new Resource("会议室" + i, "ROOM-" + i, "可用", new Date());
+                Resource resource = new Resource("会议室" + i, "ROOM-" + i, "可用");
                 repository.save(resource);
             }
         };
     }
 
-    // @Bean
+    @Bean
     public CommandLineRunner createAnnouncement(AnnouncementRepository repository) {
         return args -> {
-            Announcement announcement = new Announcement("春假放假通知", "通知", "在途", new Date());
+            Announcement announcement = new Announcement("春假放假通知", "通知", "在途", LocalDateTime.now());
             repository.save(announcement);
 
-            announcement = new Announcement("内部管理会会议纪要", "通知", "撤销", new Date());
+            announcement = new Announcement("内部管理会会议纪要", "通知", "撤销", LocalDateTime.now());
             repository.save(announcement);
         };
     }
 
-    // @Bean
+    @Bean
     public CommandLineRunner createRegulation(RegulationRepository repository) {
         return args -> {
-            Regulation regulation = new Regulation("请假制度", "人事制度", "在途", new Date());
+            Regulation regulation = new Regulation("请假制度", "人事制度", "在途", LocalDateTime.now());
             repository.save(regulation);
 
-            regulation = new Regulation("会议室使用安排", "管理制度", "撤销", new Date());
+            regulation = new Regulation("会议室使用安排", "管理制度", "撤销", LocalDateTime.now());
             repository.save(regulation);
         };
     }

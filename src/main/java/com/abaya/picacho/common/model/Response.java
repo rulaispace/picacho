@@ -1,33 +1,47 @@
 package com.abaya.picacho.common.model;
 
+import com.abaya.picacho.common.util.ConversionUtils;
 import lombok.Data;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 public class Response<T> {
-  public static final int SUCCESS = 200;
-  public static final int INNER_ERROR = 501;
+    public static final int SUCCESS = 200;
+    public static final int INNER_ERROR = 501;
 
-  private int status;
-  private T payload;
+    private int status;
+    private T payload;
 
-  public Response(int status, T payload) {
-    this.status = status;
-    this.payload = payload;
-  }
+    public Response(int status, T payload) {
+        this.status = status;
+        this.payload = payload;
+    }
 
-  public static Response success() {
-    return new Response(SUCCESS, null);
-  }
+    public static <T> Response<List<T>> success(Class<T> type, List<?> sourceList) {
+        List<T> targetList = new ArrayList<T>();
 
-  public static <T> Response<T> success(T payload) {
-    return new Response<>(SUCCESS, payload);
-  }
+        for (Object sourceObj : sourceList) {
+            targetList.add(ConversionUtils.convert(sourceObj, type));
+        }
 
-  public static Response fail(int status, String message) {
-    return new Response(status, message);
-  }
+        return success(targetList);
+    }
 
-  public static Response fail(String message) {
-    return new Response(INNER_ERROR, message);
-  }
+    public static <T> Response<T> success(Object sourceObj, Class<T> type) {
+        return success(ConversionUtils.convert(sourceObj, type));
+    }
+
+    public static <T> Response<T> success(T payload) {
+        return new Response<>(SUCCESS, payload);
+    }
+
+    public static Response fail(String message) {
+        return new Response(INNER_ERROR, message);
+    }
+
+    public static Response fail(String message, Object... args) {
+        return new Response(INNER_ERROR, String.format(message, args));
+    }
 }

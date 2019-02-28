@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -13,11 +13,11 @@ import java.util.Date;
 public class SystemUser {
     private Long id;
     private String name;
-    private String userName;
+    private String username;
     private String department;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date createDate;
+    private LocalDateTime createDateTime;
 
     private AccountState state;
 }

@@ -1,17 +1,29 @@
 package com.abaya.picacho.org.controller;
 
-import com.abaya.picacho.common.model.Node;
+import com.abaya.picacho.common.exception.ServiceException;
+import com.abaya.picacho.common.model.ExtensibleEntity;
 import com.abaya.picacho.common.model.Response;
-import com.abaya.picacho.org.model.OrgAddRequest;
+import com.abaya.picacho.common.model.TreeNode;
+import com.abaya.picacho.common.util.ConversionUtils;
+import com.abaya.picacho.org.entity.Organization;
 import com.abaya.picacho.org.model.OrgNode;
+import com.abaya.picacho.org.model.OrgType;
 import com.abaya.picacho.org.service.OrganizationService;
+import com.abaya.picacho.user.model.AccountState;
+import com.abaya.picacho.user.model.Rule;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 
 @Controller
 @Slf4j
@@ -21,35 +33,95 @@ public class OrganizationController {
 
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "org/query")
-    public Response<OrgNode> queryOrganization() throws Exception {
+    @PostMapping(value = "org/query")
+    public Response<OrgNode> queryOrganization() throws ServiceException {
         return Response.success(service.queryOrganizationAsTree());
     }
 
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "org/add")
-    public Response<OrgNode> addOrganization(@RequestBody OrgAddRequest request) throws Exception {
-        OrgNode payload = service.addOrganization(request);
-        if (payload == null) return Response.fail("更新失败");
+    @PostMapping(value = "org/add")
+    public Response<OrgNodePayload> addOrganization(@Valid @RequestBody OrgAddRequest request) throws ServiceException {
+        Organization organization = ConversionUtils.convert(request, Organization.class);
+        return Response.success(service.addOrganization(organization), OrgNodePayload.class);
+    }
 
-        return Response.success(payload);
+    @Data
+    @NoArgsConstructor
+    static class OrgAddRequest {
+        @NotNull(message = "父组织机构编码不能为空！")
+        private String parentCode;
+        @NotNull(message = "组织机构编码不能为空！")
+        private String code;
+        @NotNull(message = "名称不能为空！")
+        private String name;
+        @NotNull(message = "未知的节点类型！")
+        private OrgType type;
+        private String description;
+        @NotNull(message = "传入的操作员token不能为空！")
+        private String token;
+    }
+
+    @Data
+    @NoArgsConstructor
+    static class OrgNodePayload {
+        private String parentCode;
+        private String code;
+        private String name;
+        private OrgType type;
+        private String description;
     }
 
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "org/delete")
-    public Response<Node> deleteOrganization() throws Exception {
+    @PostMapping(value = "org/delete")
+    public Response<TreeNode> deleteOrganization() throws ServiceException {
         return Response.success(service.queryOrganizationAsTree());
     }
 
     @CrossOrigin
     @ResponseBody
-    @RequestMapping(value = "org/modify")
-    public Response<OrgNode> modifyOrganization(@RequestBody OrgNode node) throws Exception {
+    @PostMapping(value = "org/modify")
+    public Response<OrgNode> modifyOrganization(@RequestBody OrgNode node) throws ServiceException {
         OrgNode payload = service.updateOrganization(node);
         if (payload == null) return Response.fail("更新失败");
 
         return Response.success(payload);
+    }
+
+    @CrossOrigin
+    @ResponseBody
+    @PostMapping(value = "org/activate")
+    public Response<AccountPayload> activate(@Valid @RequestBody ActivateRequest request) throws Exception {
+        return Response.success(service.activateUser(request.getUsername(), request.getRule()), AccountPayload.class);
+    }
+
+    @Data
+    @NoArgsConstructor
+    static class ActivateRequest {
+        @NotNull(message = "用户名不能为空")
+        private String username;
+        @NotNull(message = "角色不能为空")
+        private Rule rule;
+    }
+
+    @CrossOrigin
+    @ResponseBody
+    @PostMapping(value = "org/deactivate")
+    public Response<AccountPayload> deactivate(@RequestBody ExtensibleEntity request) throws Exception {
+        String username = request.get("username", String.class);
+        Assert.notNull(username, "用户名不能为空");
+
+        return Response.success(service.deactivateUser(username), AccountPayload.class);
+    }
+
+    @Data
+    @NoArgsConstructor
+    static class AccountPayload {
+        private String name;
+        private String username;
+        private String password;
+        private Rule rule;
+        private AccountState state;
     }
 }

@@ -8,9 +8,9 @@ public class SystemUserHelper {
         SystemUser user = new SystemUser();
         user.setId(account.getId());
         user.setName(account.getName());
-        user.setUserName(account.getUsername());
+        user.setUsername(account.getUsername());
         user.setState(account.getState());
-        user.setCreateDate(account.getCreatedDate());
+        user.setCreateDateTime(account.getCreateDateTime());
         user.setDepartment(account.getDepartment());
 
         return user;
