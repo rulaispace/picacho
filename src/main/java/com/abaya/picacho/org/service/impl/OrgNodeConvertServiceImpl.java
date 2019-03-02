@@ -2,21 +2,21 @@ package com.abaya.picacho.org.service.impl;
 
 import com.abaya.picacho.common.model.TreeNode;
 import com.abaya.picacho.org.entity.Organization;
-import com.abaya.picacho.org.model.OrgType;
 import com.abaya.picacho.org.model.OrgNode;
-import com.abaya.picacho.org.service.OrgNodeConvertService;
+import com.abaya.picacho.org.model.OrgType;
+import com.abaya.picacho.org.service.OrganizationConvertService;
 import com.abaya.picacho.org.util.OrgNodeHelper;
 import com.abaya.picacho.user.entity.Account;
-import com.abaya.picacho.user.repository.AccountRepository;
+import com.abaya.picacho.user.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 
 @Service
-public class OrgNodeConvertServiceImpl implements OrgNodeConvertService {
+public class OrgNodeConvertServiceImpl implements OrganizationConvertService {
     @Autowired
-    private AccountRepository repository = null;
+    private AccountService accountService = null;
 
     public OrgNode convert(List<Organization> organizationList) {
         Map<String, Integer> positions = index(organizationList);
@@ -48,10 +48,10 @@ public class OrgNodeConvertServiceImpl implements OrgNodeConvertService {
 
         for (int i = 0; i < organizations.size(); i++) {
             Organization organization = organizations.get(i);
-            String parentOrgId = organization.getParentCode();
-            if (positions.get(parentOrgId) == null) continue;
+            String parentCode = organization.getParentCode();
+            if (positions.get(parentCode) == null) continue;
 
-            chain[i] = positions.get(parentOrgId);
+            chain[i] = positions.get(parentCode);
         }
 
         return chain;
@@ -66,7 +66,7 @@ public class OrgNodeConvertServiceImpl implements OrgNodeConvertService {
 
             if (organization.getType() != OrgType.employee) return ;
 
-            Account account = repository.findByUsernameIgnoreCase(organization.getCode());
+            Account account = accountService.queryAccountByUsername(organization.getCode());
             if (account == null) return ;
             node.setState(account.getState());
         });

@@ -11,5 +11,15 @@ public interface AccountService {
   List<Account> queryAllAccount();
 
   @Cacheable("accounts")
-  Account validateToken(String token) throws ServiceException;
+  Account queryValidAccountByToken(String token) throws ServiceException;
+
+  Account queryAccountByUsername(String username);
+
+  Account upsertAccount(Account account);
+
+  boolean isValidAccount(String username);
+
+  boolean isUsedUsername(String username);
+
+  Account resetPassword(String username, String operator) throws ServiceException;
 }

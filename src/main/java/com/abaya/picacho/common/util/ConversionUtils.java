@@ -34,26 +34,40 @@ public class ConversionUtils implements ApplicationContextAware {
     }
 
     private static <T> T convertToken2Username(Object source, T result) {
-        String token = PropertyGetter.invoke(source, "token", String.class);
+        String token = PropertyUtils.get(source, "token", String.class);
         if (token == null) return result;
 
-        AccountService service = applicationContext.getBean(AccountService.class);
-
-        try {
-            Account account = service.validateToken(token);
-            if (account == null) {
-                log.warn("未找到（{}）的用户数据！", token);
-                return result;
-            }
-
-            String username = account.getUsername();
-            PropertySetter.invoke(result, "creator", username);
-            PropertySetter.invoke(result, "modifier", username);
-        } catch (ServiceException e) {
-            log.warn("查询用户信息异常", e);
+        String username = getUsernameByToken(token);
+        if (username == null) {
+            log.warn("未找到（{}）的用户数据！", token);
+            return result;
         }
 
+        PropertyUtils.set(result, "creator", username);
+        PropertyUtils.set(result, "modifier", username);
+
         return result;
+    }
+
+    public static String getUsernameByToken(String token) {
+        if (token == null) return null;
+        if (applicationContext == null) return null;
+
+        AccountService service = applicationContext.getBean(AccountService.class);
+        if (service == null) return null;
+
+        try {
+            Account account = service.queryValidAccountByToken(token);
+            if (account == null) {
+                log.warn("未找到（{}）的用户数据！", token);
+                return null;
+            }
+
+            return account.getUsername();
+        } catch (ServiceException e) {
+            log.warn("查询用户信息异常", e);
+            return null;
+        }
     }
 
     @Override

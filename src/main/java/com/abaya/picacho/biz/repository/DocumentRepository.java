@@ -1,4 +1,4 @@
-package com.abaya.picacho.user.repository;
+package com.abaya.picacho.biz.repository;
 
 import com.abaya.picacho.biz.entity.Document;
 import org.springframework.data.repository.CrudRepository;

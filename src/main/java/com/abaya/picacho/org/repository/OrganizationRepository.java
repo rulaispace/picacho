@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface OrganizationRepository extends CrudRepository<Organization, Long> {
     List<Organization> findAll();
-    Organization findByCode(String code);
+    List<Organization> findByParentCode(String parentCode);
+    Organization findByCodeIgnoreCase(String code);
 }

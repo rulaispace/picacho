@@ -1,6 +1,6 @@
 package com.abaya.picacho.user.entity;
 
-import com.abaya.picacho.user.model.Rule;
+import com.abaya.picacho.user.model.RuleType;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -13,12 +13,12 @@ public class Account extends AccountBase {
   private String name;
 
   @Enumerated(EnumType.STRING)
-  private Rule rule = Rule.employee;
+  private RuleType rule = RuleType.employee;
   private String department = ROOT_DEPARTMENT;
 
   public Account() {}
 
-  public Account(String username, String password, String name, Rule rule) {
+  public Account(String username, String password, String name, RuleType rule) {
     this.username = username;
     this.password = password;
     this.name = name;

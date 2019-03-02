@@ -1,7 +1,7 @@
 package com.abaya.picacho.user.repository;
 
 import com.abaya.picacho.user.entity.Account;
-import com.abaya.picacho.user.model.Rule;
+import com.abaya.picacho.user.model.RuleType;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class AccountRepositoryTest {
 
   @Test
   public void saveAndQueryAccount() {
-    Account account = new Account("ZhangSan", "abcd1234", "张三", Rule.employee);
+    Account account = new Account("ZhangSan", "abcd1234", "张三", RuleType.employee);
     repository.save(account);
   }
 }

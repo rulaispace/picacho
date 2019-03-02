@@ -1,6 +1,6 @@
 package com.abaya.picacho.user.model;
 
-public enum Rule {
+public enum RuleType {
     admin,
     employee,
 }

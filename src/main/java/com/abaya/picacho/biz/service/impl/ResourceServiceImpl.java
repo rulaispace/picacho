@@ -1,7 +1,7 @@
 package com.abaya.picacho.biz.service.impl;
 
 import com.abaya.picacho.biz.entity.Resource;
-import com.abaya.picacho.user.repository.ResourceRepository;
+import com.abaya.picacho.biz.repository.ResourceRepository;
 import com.abaya.picacho.biz.service.ResourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

@@ -25,12 +25,20 @@ public class Organization extends EntityBase {
     }
 
     public Organization(int level, String code, String parentCode, OrgType type, String name, String description) {
-        this.level = level;
-        this.code = code;
-        this.parentCode = parentCode;
-        this.type = type;
-        this.name = name;
-        this.description = description;
+        setLevel(level);
+        setCode(code);
+        setParentCode(parentCode);
+        setType(type);
+        setName(name);
+        setDescription(description);
     }
 
+
+    public void setCode(String code) {
+        this.code = code == null ? null : code.toUpperCase();
+    }
+
+    public void setParentCode(String parentCode) {
+        this.parentCode = parentCode == null ? null : parentCode.toUpperCase();
+    }
 }

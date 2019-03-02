@@ -5,6 +5,6 @@ import com.abaya.picacho.org.model.OrgNode;
 
 import java.util.List;
 
-public interface OrgNodeConvertService {
+public interface OrganizationConvertService {
     OrgNode convert(List<Organization> organizations);
 }

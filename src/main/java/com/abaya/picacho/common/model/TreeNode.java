@@ -10,7 +10,7 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 public class TreeNode implements Comparable<TreeNode> {
-  private Long id;
+  private String id;
   private int level;
   private String type;
   private String primaryText;
@@ -44,7 +44,7 @@ public class TreeNode implements Comparable<TreeNode> {
   @Override
   public int compareTo(TreeNode another) {
     if (this.type.equals(another.type)) {
-      return (int)(this.id - another.id);
+      return this.id.compareTo(another.id);
     }
 
     if ("department".equals(this.type)) {

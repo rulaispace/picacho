@@ -19,7 +19,7 @@ public class Response<T> {
         this.payload = payload;
     }
 
-    public static <T> Response<List<T>> success(Class<T> type, List<?> sourceList) {
+    public static <T> Response<List<T>> success(List<?> sourceList, Class<T> type) {
         List<T> targetList = new ArrayList<T>();
 
         for (Object sourceObj : sourceList) {
@@ -35,6 +35,14 @@ public class Response<T> {
 
     public static <T> Response<T> success(T payload) {
         return new Response<>(SUCCESS, payload);
+    }
+
+    public static Response success(String message) {
+        return new Response(SUCCESS, message);
+    }
+
+    public static Response success(String message, Object... args) {
+        return success(String.format(message, args));
     }
 
     public static Response fail(String message) {
