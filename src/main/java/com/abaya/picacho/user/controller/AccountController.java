@@ -5,7 +5,7 @@ import com.abaya.picacho.common.model.AuthorizedRequest;
 import com.abaya.picacho.common.model.ExtensibleEntity;
 import com.abaya.picacho.common.model.Response;
 import com.abaya.picacho.user.entity.Account;
-import com.abaya.picacho.user.model.AccountState;
+import com.abaya.picacho.common.model.CommonState;
 import com.abaya.picacho.user.model.RuleType;
 import com.abaya.picacho.user.service.AccountService;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -45,6 +45,7 @@ public class AccountController {
         private String username;
         private RuleType rule;
         private String token;
+        private boolean shouldChangePassword;
     }
 
     @Data
@@ -60,7 +61,7 @@ public class AccountController {
         @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
         private LocalDateTime createDateTime;
 
-        private AccountState state;
+        private CommonState state;
     }
 
     @Data
@@ -74,7 +75,18 @@ public class AccountController {
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    static class ResetPasswordPayload {
+    static class ChangePasswordRequest extends ResetPasswordRequest {
+        @NotNull(message = "原密码不能为空")
+        private String oldPassword;
+
+        @NotNull(message = "新密码不能为空")
+        private String newPassword;
+    }
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    static class PasswordModifyPayload {
         private String name;
         private String username;
         private String password;
@@ -98,9 +110,17 @@ public class AccountController {
     @CrossOrigin
     @ResponseBody
     @PostMapping(value = "user/resetPassword")
-    public Response<ResetPasswordPayload> resetPassword(@Valid @RequestBody ResetPasswordRequest request) throws ServiceException {
+    public Response<PasswordModifyPayload> resetPassword(@Valid @RequestBody ResetPasswordRequest request) throws ServiceException {
         Account account = service.resetPassword(request.getUsername(), request.getOperator());
-        return Response.success(account, ResetPasswordPayload.class);
+        return Response.success(account, PasswordModifyPayload.class);
+    }
+
+    @CrossOrigin
+    @ResponseBody
+    @PostMapping(value = "user/changePassword")
+    public Response<PasswordModifyPayload> changePassword(@Valid @RequestBody ChangePasswordRequest request) throws ServiceException {
+        Account account = service.changePassword(request.getUsername(), request.getOldPassword(), request.getNewPassword(), request.getOperator());
+        return Response.success(account, PasswordModifyPayload.class);
     }
 }
 

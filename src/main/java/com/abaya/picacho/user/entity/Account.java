@@ -14,6 +14,7 @@ public class Account extends AccountBase {
 
   @Enumerated(EnumType.STRING)
   private RuleType rule = RuleType.employee;
+
   private String department = ROOT_DEPARTMENT;
 
   public Account() {}

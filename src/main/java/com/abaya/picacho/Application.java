@@ -7,7 +7,7 @@ import com.abaya.picacho.org.model.OrgType;
 import com.abaya.picacho.org.repository.OrganizationRepository;
 import com.abaya.picacho.user.entity.Account;
 import com.abaya.picacho.user.model.RuleType;
-import com.abaya.picacho.user.repository.*;
+import com.abaya.picacho.user.repository.AccountRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -87,16 +87,6 @@ public class Application {
 
             organization = new Organization(2, "ZHANGSAN", "BGS", OrgType.employee, "张三", "办公室主任");
             repository.save(organization);
-        };
-    }
-
-    // @Bean
-    public CommandLineRunner createResource(ResourceRepository repository) {
-        return args -> {
-            for (int i=0; i<6; i++) {
-                Resource resource = new Resource("会议室" + i, "ROOM-" + i, "可用");
-                repository.save(resource);
-            }
         };
     }
 

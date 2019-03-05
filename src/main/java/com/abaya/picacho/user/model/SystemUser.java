@@ -1,5 +1,6 @@
 package com.abaya.picacho.user.model;
 
+import com.abaya.picacho.common.model.CommonState;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,5 +20,5 @@ public class SystemUser {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDateTime createDateTime;
 
-    private AccountState state;
+    private CommonState state;
 }

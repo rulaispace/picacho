@@ -1,7 +1,7 @@
 package com.abaya.picacho.user.entity;
 
 import com.abaya.picacho.common.entity.EntityBase;
-import com.abaya.picacho.user.model.AccountState;
+import com.abaya.picacho.common.model.CommonState;
 import com.abaya.picacho.common.util.RandomUtils;
 import lombok.Data;
 
@@ -17,5 +17,8 @@ public class AccountBase extends EntityBase {
   private String token = RandomUtils.uuid();
 
   @Enumerated(EnumType.STRING)
-  protected AccountState state = AccountState.valid;
+  protected CommonState state = CommonState.valid;
+
+  // 是否需要修改密码
+  private boolean shouldChangePassword = true;
 }

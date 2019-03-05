@@ -11,7 +11,7 @@ import com.abaya.picacho.org.service.OrganizationAidService;
 import com.abaya.picacho.org.service.OrganizationConvertService;
 import com.abaya.picacho.org.service.OrganizationService;
 import com.abaya.picacho.user.entity.Account;
-import com.abaya.picacho.user.model.AccountState;
+import com.abaya.picacho.common.model.CommonState;
 import com.abaya.picacho.user.model.RuleType;
 import com.abaya.picacho.user.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,7 +111,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         if (account == null)
             return activateUserAtFirstTime(username, rule, operator);
 
-        if (account.getState() == AccountState.valid)
+        if (account.getState() == CommonState.valid)
             throw new ServiceException("用户(%s)已经存在，且账户状态正常", username);
 
         if (rule != null) account.setRule(rule);
@@ -135,7 +135,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         account.setDepartment(aidService.generateOrganizationFullName(organization.getParentCode()));
         account.setName(organization.getName());
         account.setRule(rule);
-        account.setState(AccountState.valid);
+        account.setState(CommonState.valid);
         account.setCreator(operator);
         account.setModifier(operator);
 
@@ -144,7 +144,7 @@ public class OrganizationServiceImpl implements OrganizationService {
 
     private Account activateInvalidUser(Account account) throws ServiceException {
         // 修改状态且重置密码
-        account.setState(AccountState.valid);
+        account.setState(CommonState.valid);
         account.setPassword(RandomUtils.generatePassayPassword());
         return accountService.upsertAccount(account);
     }
@@ -157,10 +157,10 @@ public class OrganizationServiceImpl implements OrganizationService {
         Account account = accountService.queryAccountByUsername(username.toUpperCase());
         if (account == null) throw new ServiceException("用户(%s)在系统中不存在！", username);
 
-        if (account.getState() != AccountState.valid) throw new ServiceException("用户(%s)状态异常，无法注销！", username);
+        if (account.getState() != CommonState.valid) throw new ServiceException("用户(%s)状态异常，无法注销！", username);
 
         account.setModifier(operator);
-        account.setState(AccountState.invalid);
+        account.setState(CommonState.invalid);
         return accountService.upsertAccount(account);
     }
 }

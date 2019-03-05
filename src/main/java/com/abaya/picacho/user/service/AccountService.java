@@ -22,4 +22,6 @@ public interface AccountService {
   boolean isUsedUsername(String username);
 
   Account resetPassword(String username, String operator) throws ServiceException;
+
+  Account changePassword(String username, String oldPassword, String newPassword, String operator) throws ServiceException;
 }

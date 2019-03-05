@@ -1,7 +1,7 @@
 package com.abaya.picacho.user.repository;
 
 import com.abaya.picacho.user.entity.Account;
-import com.abaya.picacho.user.model.AccountState;
+import com.abaya.picacho.common.model.CommonState;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -11,5 +11,5 @@ public interface AccountRepository extends CrudRepository<Account, Long> {
 
     Account findByUsernameIgnoreCase(String userName);
 
-    Account findByTokenAndState(String token, AccountState state);
+    Account findByTokenAndState(String token, CommonState state);
 }

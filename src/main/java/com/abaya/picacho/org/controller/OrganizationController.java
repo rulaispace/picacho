@@ -8,7 +8,7 @@ import com.abaya.picacho.org.entity.Organization;
 import com.abaya.picacho.org.model.OrgNode;
 import com.abaya.picacho.org.model.OrgType;
 import com.abaya.picacho.org.service.OrganizationService;
-import com.abaya.picacho.user.model.AccountState;
+import com.abaya.picacho.common.model.CommonState;
 import com.abaya.picacho.user.model.RuleType;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -80,7 +80,7 @@ public class OrganizationController {
         private String username;
         private String password;
         private RuleType rule;
-        private AccountState state;
+        private CommonState state;
     }
 
     @Data
@@ -118,7 +118,7 @@ public class OrganizationController {
     @CrossOrigin
     @ResponseBody
     @PostMapping(value = "org/delete")
-    public Response<OrgNodePayload> deleteOrganization(@Valid @RequestBody OrgDeleteRequest request) throws ServiceException {
+    public Response deleteOrganization(@Valid @RequestBody OrgDeleteRequest request) throws ServiceException {
         service.deleteOrganization(request.getCode(), request.getOperator());
         return Response.success("节点(%s)删除成功", request.getCode());
     }
