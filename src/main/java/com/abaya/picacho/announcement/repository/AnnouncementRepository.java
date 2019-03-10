@@ -1,6 +1,6 @@
-package com.abaya.picacho.biz.repository;
+package com.abaya.picacho.announcement.repository;
 
-import com.abaya.picacho.biz.entity.Announcement;
+import com.abaya.picacho.announcement.entity.Announcement;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;

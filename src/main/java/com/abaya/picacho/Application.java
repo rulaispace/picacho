@@ -1,7 +1,14 @@
 package com.abaya.picacho;
 
-import com.abaya.picacho.biz.entity.*;
-import com.abaya.picacho.biz.repository.*;
+import com.abaya.picacho.biz.entity.Document;
+import com.abaya.picacho.biz.entity.Notification;
+import com.abaya.picacho.biz.entity.Regulation;
+import com.abaya.picacho.biz.entity.Schedule;
+import com.abaya.picacho.biz.repository.DocumentRepository;
+import com.abaya.picacho.biz.repository.NotificationRepository;
+import com.abaya.picacho.biz.repository.RegulationRepository;
+import com.abaya.picacho.biz.repository.ScheduleRepository;
+import com.abaya.picacho.common.config.FileStorageProperties;
 import com.abaya.picacho.org.entity.Organization;
 import com.abaya.picacho.org.model.OrgType;
 import com.abaya.picacho.org.repository.OrganizationRepository;
@@ -11,12 +18,16 @@ import com.abaya.picacho.user.repository.AccountRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 
 import java.time.LocalDateTime;
 
 @SpringBootApplication
 @EnableCaching
+@EnableConfigurationProperties({
+        FileStorageProperties.class
+})
 public class Application {
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
@@ -91,7 +102,7 @@ public class Application {
     }
 
     // @Bean
-    public CommandLineRunner createAnnouncement(AnnouncementRepository repository) {
+    /*public CommandLineRunner createAnnouncement(AnnouncementRepository repository) {
         return args -> {
             Announcement announcement = new Announcement("春假放假通知", "通知", "在途", LocalDateTime.now());
             repository.save(announcement);
@@ -99,7 +110,7 @@ public class Application {
             announcement = new Announcement("内部管理会会议纪要", "通知", "撤销", LocalDateTime.now());
             repository.save(announcement);
         };
-    }
+    }*/
 
     // @Bean
     public CommandLineRunner createRegulation(RegulationRepository repository) {

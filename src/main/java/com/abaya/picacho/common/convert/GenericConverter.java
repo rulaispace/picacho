@@ -1,15 +1,16 @@
 package com.abaya.picacho.common.convert;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.BeanUtils;
+import org.modelmapper.ModelMapper;
 import org.springframework.core.convert.TypeDescriptor;
 import org.springframework.core.convert.converter.ConditionalGenericConverter;
 
-import java.lang.reflect.Constructor;
 import java.util.Set;
 
 @Slf4j
 public class GenericConverter implements ConditionalGenericConverter {
+    private final ModelMapper mapper = new ModelMapper();
+
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {
         if (sourceType.getType() == targetType.getType()) return false;
@@ -23,7 +24,8 @@ public class GenericConverter implements ConditionalGenericConverter {
 
     @Override
     public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-        try {
+        // return mapper.convertValue(source, targetType.getType());
+       /* try {
             Constructor constructor = targetType.getType().getDeclaredConstructor();
             constructor.setAccessible(true);
             Object target = constructor.newInstance();
@@ -31,6 +33,7 @@ public class GenericConverter implements ConditionalGenericConverter {
             return target;
         } catch (Exception e) {
             throw new IllegalArgumentException("Fail to construct the target type", e);
-        }
+        }*/
+       return mapper.map(source, targetType.getType());
     }
 }
