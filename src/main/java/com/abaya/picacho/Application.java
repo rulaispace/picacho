@@ -20,6 +20,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.Bean;
 
 import java.time.LocalDateTime;
 
@@ -33,14 +34,15 @@ public class Application {
         SpringApplication.run(Application.class, args);
     }
 
-    // @Bean
+    @Bean
     public CommandLineRunner createDefaultAccount(AccountRepository repository) {
         return (args) -> {
           Account account = new Account("ADMIN", "admin", "管理员", RuleType.admin);
-          repository.save(account);
-
-          account = new Account("ZHANGSAN", "zhangsan", "张三", RuleType.employee);
-          repository.save(account);
+          if (repository.findByUsernameIgnoreCase("ADMIN") == null) {
+              repository.save(account);
+          }
+          // account = new Account("ZHANGSAN", "zhangsan", "张三", RuleType.employee);
+          // repository.save(account);
         };
     }
 
@@ -78,13 +80,15 @@ public class Application {
         };
     }
 
-    // @Bean
+    @Bean
     public CommandLineRunner createOrganization(OrganizationRepository repository) {
         return (args) -> {
             Organization organization = new Organization(0, "ROOT", null, OrgType.department, "公司", "公司根节点");
-            repository.save(organization);
+            if (repository.findByCodeIgnoreCase("ROOT") == null) {
+                repository.save(organization);
+            }
 
-            organization = new Organization(1, "JSB", "ROOT", OrgType.department, "技术部", "负责开发工作");
+            /*organization = new Organization(1, "JSB", "ROOT", OrgType.department, "技术部", "负责开发工作");
             repository.save(organization);
 
             organization = new Organization(1, "RLZYB", "ROOT", OrgType.department, "人力资源部", "招聘、薪酬、培训");
@@ -97,7 +101,7 @@ public class Application {
             repository.save(organization);
 
             organization = new Organization(2, "ZHANGSAN", "BGS", OrgType.employee, "张三", "办公室主任");
-            repository.save(organization);
+            repository.save(organization);*/
         };
     }
 
