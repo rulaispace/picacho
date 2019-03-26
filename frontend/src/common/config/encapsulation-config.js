@@ -53,6 +53,18 @@ const boxing = {
                     width: '20%',
                 }
             ],
+        },
+        dialog: {
+            open: false,
+            toolbar: {
+                feature: {
+                    showInput: false,
+                    showRightButtonGroup: true,
+                    showLeftButton: true,
+                },
+                leftButton: {id: iconNames.close,}
+            },
+            form: {}
         }
     },
     document: {
@@ -200,6 +212,7 @@ const boxing = {
                     id: 'state',
                     label: '状态',
                     width: '10%',
+                    disablePadding: true,
                 },
                 {
                     id: 'createDateTime',

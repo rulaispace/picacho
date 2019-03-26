@@ -2,7 +2,7 @@ package com.abaya.picacho.resource.service.impl;
 
 import com.abaya.picacho.common.exception.ServiceException;
 import com.abaya.picacho.common.model.CommonState;
-import com.abaya.picacho.common.util.PropertyUtils;
+import com.abaya.picacho.common.util.EntityUtils;
 import com.abaya.picacho.resource.entity.Resource;
 import com.abaya.picacho.resource.repository.ResourceRepository;
 import com.abaya.picacho.resource.service.ResourceService;
@@ -49,7 +49,7 @@ public class ResourceServiceImpl implements ResourceService {
         Resource origin = repository.findByCodeIgnoreCase(code);
         if (origin == null) throw new ServiceException("组织机构（%s）不存在，请确认请求参数是否正确", code);
 
-        return repository.save(PropertyUtils.entityUpdateMerge(origin, resource));
+        return repository.save(EntityUtils.entityUpdateMerge(origin, resource));
     }
 
     @Override

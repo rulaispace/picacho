@@ -4,25 +4,30 @@ import com.abaya.picacho.announcement.entity.Announcement;
 import com.abaya.picacho.announcement.entity.AnnouncementAttachment;
 import com.abaya.picacho.announcement.model.AnnouncementState;
 import com.abaya.picacho.announcement.repository.AnnouncementRepository;
-import com.abaya.picacho.announcement.repository.AttachmentRepository;
+import com.abaya.picacho.announcement.repository.AnnouncementAttachmentRepository;
 import com.abaya.picacho.announcement.service.AnnouncementService;
 import com.abaya.picacho.common.exception.ServiceException;
-import com.abaya.picacho.common.util.PropertyUtils;
+import com.abaya.picacho.common.util.EntityUtils;
+import com.abaya.picacho.notification.service.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 
 @Service
 public class AnnouncementServiceImpl implements AnnouncementService {
     @Autowired
+    private NotificationService notificationService;
+
+    @Autowired
     private AnnouncementRepository announcementRepository;
     @Autowired
-    private AttachmentRepository attachmentRepository;
+    private AnnouncementAttachmentRepository attachmentRepository;
 
     @Override
     public AnnouncementAttachment addAttachment(AnnouncementAttachment attachment) {
@@ -55,12 +60,13 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         Announcement announcement = announcementRepository.findById(id).orElse(new Announcement());
         if (announcement.getId() == null) throw new ServiceException("未找到编号(%d)的公告，无法发布！", id);
 
-        if (announcement.getState() != AnnouncementState.inEdit) throw  new ServiceException("待发布公告状态不正确，无法发布！");
+        if (announcement.getState() != AnnouncementState.inEdit) throw new ServiceException("待发布公告状态不正确，无法发布！");
 
         announcement.setState(AnnouncementState.released);
         announcement.setReleaseDateTime(LocalDateTime.now());
         announcement.setModifier(operator);
 
+        if (!notificationService.sendAnnouncement(announcement)) throw new ServiceException("发布公告失败！");
         return announcementRepository.save(announcement);
     }
 
@@ -72,26 +78,31 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         Announcement announcement = announcementRepository.findById(id).orElse(new Announcement());
         if (announcement.getId() == null) throw new ServiceException("未找到编号(%d)的公告，无法发布！", id);
 
-        if (announcement.getState() != AnnouncementState.released) throw  new ServiceException("待撤回公告状态不正确，无法撤回！");
+        if (announcement.getState() != AnnouncementState.released) throw new ServiceException("待撤回公告状态不正确，无法撤回！");
 
         announcement.setState(AnnouncementState.inEdit);
         announcement.setModifier(operator);
 
+        if (!notificationService.callbackAnnouncement(announcement)) throw new ServiceException("公告撤回失败！");
         return announcementRepository.save(announcement);
     }
 
     @Override
+    public Announcement queryAnnouncementById(Long id) {
+        Assert.notNull(id, "传入的记录编号不能为空！");
+        return announcementRepository.findById(id).orElse(new Announcement());
+    }
+
+    @Override
+    @Transactional
     public Announcement addAnnouncement(Announcement announcement) throws ServiceException {
         Assert.notNull(announcement, "传入的待新增公告不能为空");
         Assert.isNull(announcement.getId(), "待新增的公告不能包含主键信息");
 
         Announcement localAnnouncement = announcementRepository.save(announcement);
         if (localAnnouncement == null) throw new ServiceException("公告存储失败，无法存储公告信息！");
-        announcement.getAttachments().forEach(attachment -> {
-            attachment.setAnnouncement(localAnnouncement);
-        });
-        attachmentRepository.saveAll(announcement.getAttachments());
 
+        updateAttachments(localAnnouncement, announcement);
         return localAnnouncement;
     }
 
@@ -120,24 +131,29 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         if (localAnnouncement.getState() != AnnouncementState.inEdit) throw new ServiceException("公告(%d)状态不正确，无法修改", id);
 
         updateAttachments(localAnnouncement, announcement);
-        return announcementRepository.save(PropertyUtils.entityUpdateMerge(localAnnouncement, announcement));
+        return announcementRepository.save(EntityUtils.entityUpdateMerge(localAnnouncement, announcement));
     }
 
-    private void updateAttachments(Announcement localAnnouncement, Announcement updateAnnouncement) {
-        attachmentRepository.deleteAllByAnnouncement(localAnnouncement);
-        localAnnouncement.getAttachments().clear();
+    private void updateAttachments(Announcement localAnnouncement, Announcement updateAnnouncement) throws ServiceException {
+        // 将原有附件全部清空
+        List<AnnouncementAttachment> originAttachments =  attachmentRepository.findAllByAnnouncement(localAnnouncement);
+        originAttachments.forEach(attachment -> {attachment.setAnnouncement(null);});
+        attachmentRepository.saveAll(originAttachments);
 
-        Set<AnnouncementAttachment> attachments = updateAnnouncement.getAttachments();
-        attachments.forEach(attachment -> {
-            attachment.setAnnouncement(localAnnouncement);
-        });
-        attachmentRepository.saveAll(attachments).forEach(attachment -> {
-            localAnnouncement.getAttachments().add(attachment);
-        });
+        List<AnnouncementAttachment> newAttachments = new ArrayList<>();
+        for (AnnouncementAttachment attachment : updateAnnouncement.getAttachments()) {
+            AnnouncementAttachment localAttachment = attachmentRepository.findByNickNameAndFileName(attachment.getNickName(), attachment.getFileName());
+            if (localAttachment == null) throw new ServiceException("未找到需要存储的附件内容");
+
+            localAttachment.setAnnouncement(localAnnouncement);
+            newAttachments.add(localAttachment);
+        }
+
+        attachmentRepository.saveAll(newAttachments);
     }
 
     @Override
     public List<Announcement> queryAll() {
-        return announcementRepository.findAll();
+        return announcementRepository.findAllByOrderByUpdateDateTimeDesc();
     }
 }

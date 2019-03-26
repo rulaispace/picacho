@@ -1,8 +1,11 @@
 import commonNames from "../config/common-name-config";
 
 const serverAddress = function() {
-    // return 'http://120.27.11.139:8080'
-    return 'http://localhost:8080'
+    const defaultServerAddress = "http://localhost:8080";
+    if (window == null) return defaultServerAddress;
+    if (window.location == null) return defaultServerAddress;
+    if (window.location.port == 3000) return defaultServerAddress;
+    return "http://" + window.location.hostname + ":" + window.location.port
 }()
 
 export function linkUrl(fileName) {

@@ -1,10 +1,13 @@
 import ReducerBase from "../../../common/redux/reducer-base";
+import commonNames from "../../../common/config/common-name-config";
 
 const types = {
     loading: 'loadingNotificationData',
     filter: 'filterNotificationData',
     changePage: 'changePageOfNotificationData',
-    changeRowsPerPage: 'changeRowsPerPageOfNotificationData'
+    changeRowsPerPage: 'changeRowsPerPageOfNotificationData',
+    openViewDialog: 'openViewDialogOfNotification',
+    closeDialog: 'closeDialogOfNotification'
 }
 
 const reducers = [
@@ -24,6 +27,14 @@ const reducers = [
         type: types.changeRowsPerPage,
         action: ReducerBase.defaultAction(types.changeRowsPerPage),
         reduce: ReducerBase.defaultChangeRowsPerPageOfTable(),
+    }, {
+        type: types.openViewDialog,
+        action: ReducerBase.defaultAction(types.openViewDialog),
+        reduce: ReducerBase.defaultOpenDialog(commonNames.view),
+    }, {
+        type: types.closeDialog,
+        action: ReducerBase.defaultAction(types.closeDialog),
+        reduce: ReducerBase.defaultCloseEditDialog(),
     }
 ]
 

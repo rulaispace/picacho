@@ -48,10 +48,6 @@ public class PropertyUtils {
         }
     }
 
-    public static <T> T entityUpdateMerge(T target, Object source) {
-        return merge(target, source, "creator");
-    }
-
     public static <T> T merge(T target, Object source) {
         return merge(target, source, null);
     }

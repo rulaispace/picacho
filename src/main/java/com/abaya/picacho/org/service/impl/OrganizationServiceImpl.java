@@ -1,7 +1,8 @@
 package com.abaya.picacho.org.service.impl;
 
 import com.abaya.picacho.common.exception.ServiceException;
-import com.abaya.picacho.common.util.PropertyUtils;
+import com.abaya.picacho.common.model.CommonState;
+import com.abaya.picacho.common.util.EntityUtils;
 import com.abaya.picacho.common.util.RandomUtils;
 import com.abaya.picacho.org.entity.Organization;
 import com.abaya.picacho.org.model.OrgNode;
@@ -11,7 +12,6 @@ import com.abaya.picacho.org.service.OrganizationAidService;
 import com.abaya.picacho.org.service.OrganizationConvertService;
 import com.abaya.picacho.org.service.OrganizationService;
 import com.abaya.picacho.user.entity.Account;
-import com.abaya.picacho.common.model.CommonState;
 import com.abaya.picacho.user.model.RuleType;
 import com.abaya.picacho.user.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,7 +55,7 @@ public class OrganizationServiceImpl implements OrganizationService {
         if (organization.getType() != null && organization.getType() != origin.getType())
             throw new ServiceException("组织结构类型不可修改！");
 
-        return repository.save(PropertyUtils.entityUpdateMerge(origin, organization));
+        return repository.save(EntityUtils.entityUpdateMerge(origin, organization));
     }
 
     @Override

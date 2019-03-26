@@ -19,6 +19,7 @@ const commonNames = {
     view: 'view',
     callback: 'callback',
     publish: 'publish',
+    queryDetail: 'queryDetail',
     modify: 'modify',
     delete: 'delete',
 

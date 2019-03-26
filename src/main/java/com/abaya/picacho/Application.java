@@ -1,11 +1,9 @@
 package com.abaya.picacho;
 
 import com.abaya.picacho.biz.entity.Document;
-import com.abaya.picacho.biz.entity.Notification;
 import com.abaya.picacho.biz.entity.Regulation;
 import com.abaya.picacho.biz.entity.Schedule;
 import com.abaya.picacho.biz.repository.DocumentRepository;
-import com.abaya.picacho.biz.repository.NotificationRepository;
 import com.abaya.picacho.biz.repository.RegulationRepository;
 import com.abaya.picacho.biz.repository.ScheduleRepository;
 import com.abaya.picacho.common.config.FileStorageProperties;
@@ -37,23 +35,12 @@ public class Application {
     @Bean
     public CommandLineRunner createDefaultAccount(AccountRepository repository) {
         return (args) -> {
-          Account account = new Account("ADMIN", "admin", "管理员", RuleType.admin);
-          if (repository.findByUsernameIgnoreCase("ADMIN") == null) {
-              repository.save(account);
-          }
-          // account = new Account("ZHANGSAN", "zhangsan", "张三", RuleType.employee);
-          // repository.save(account);
-        };
-    }
-
-    // @Bean
-    public CommandLineRunner createNotifications(NotificationRepository repository) {
-        return (args) -> {
-            Notification notification = new Notification("春节放假通知", "变更", "王小二", LocalDateTime.now());
-            repository.save(notification);
-
-            notification = new Notification("内部管理会会议纪要", "通知", "张小三", LocalDateTime.now());
-            repository.save(notification);
+            Account account = new Account("ADMIN", "admin", "管理员", RuleType.admin);
+            if (repository.findByUsernameIgnoreCase("ADMIN") == null) {
+                repository.save(account);
+            }
+            // account = new Account("ZHANGSAN", "zhangsan", "张三", RuleType.employee);
+            // repository.save(account);
         };
     }
 

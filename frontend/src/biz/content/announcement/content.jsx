@@ -307,11 +307,10 @@ export default class Content extends React.Component {
     render() {
         if (this.store.getState().announcement.mode === commonNames.add
             || this.store.getState().announcement.mode === commonNames.modify
-            || this.store.getState().announcement.mode === commonNames.view)
-            return (
-                <DefaultFormDialog classes={this.classes} handlers={this.handlers.dialog} state={this.store.getState().announcement.dialog}/>
-            )
-        else
+            || this.store.getState().announcement.mode === commonNames.view) {
+            return <DefaultFormDialog classes={this.classes} handlers={this.handlers.dialog} state={this.store.getState().announcement.dialog}/>
+        }
+        else {
             return (
                 <main className={this.classes.contentDefaultRoot}>
                     <div className={this.classes.contentDefaultAppbarSpacer} />
@@ -325,6 +324,7 @@ export default class Content extends React.Component {
                     </Paper>
                 </main>
             )
+        }
     }
 }
 

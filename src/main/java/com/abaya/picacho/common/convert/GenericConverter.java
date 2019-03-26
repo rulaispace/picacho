@@ -24,16 +24,6 @@ public class GenericConverter implements ConditionalGenericConverter {
 
     @Override
     public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-        // return mapper.convertValue(source, targetType.getType());
-       /* try {
-            Constructor constructor = targetType.getType().getDeclaredConstructor();
-            constructor.setAccessible(true);
-            Object target = constructor.newInstance();
-            BeanUtils.copyProperties(source, target);
-            return target;
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Fail to construct the target type", e);
-        }*/
        return mapper.map(source, targetType.getType());
     }
 }

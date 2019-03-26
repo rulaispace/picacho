@@ -6,21 +6,27 @@ import com.abaya.picacho.common.entity.EntityBase;
 import lombok.Data;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.OneToMany;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 
 @Data
 @Entity
 public class Announcement extends EntityBase {
     private String title;
     private String content;
+
+    @Enumerated(EnumType.STRING)
     private AnnouncementType type;
+
+    @Enumerated(EnumType.STRING)
     private AnnouncementState state = AnnouncementState.inEdit;
 
     @OneToMany(mappedBy = "announcement")
-    private Set<AnnouncementAttachment> attachments;
+    private List<AnnouncementAttachment> attachments;
 
     private LocalDateTime releaseDateTime;
 

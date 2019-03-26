@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -123,5 +124,15 @@ public class AccountServiceImpl implements AccountService {
         account.setShouldChangePassword(false);
 
         return repository.save(account);
+    }
+
+    @Override
+    public String queryNameByUsername(String username) throws ServiceException {
+        Assert.notNull(username, "用户名不能为空");
+
+        Account account = queryAccountByUsername(username);
+        if (account == null) throw new ServiceException(MessageFormat.format("未找到登录名为[{0}]的用户", username));
+
+        return account.getName();
     }
 }

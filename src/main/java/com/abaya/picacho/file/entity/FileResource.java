@@ -10,4 +10,17 @@ import javax.persistence.MappedSuperclass;
 public class FileResource extends EntityBase {
     protected String nickName;
     protected String fileName;
+
+    @Override
+    public String toString() {
+        return "FileResource{" +
+                "nickName='" + nickName + '\'' +
+                ", fileName='" + fileName + '\'' +
+                ", id=" + id +
+                ", creator='" + creator + '\'' +
+                ", modifier='" + modifier + '\'' +
+                ", createDateTime=" + createDateTime +
+                ", updateDateTime=" + updateDateTime +
+                '}';
+    }
 }

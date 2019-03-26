@@ -3,8 +3,6 @@ package com.abaya.picacho.common.util;
 import com.abaya.picacho.org.entity.Organization;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
-
 public class PropertyUtilsTest {
     @Test
     public void testMerge() {
@@ -28,7 +26,7 @@ public class PropertyUtilsTest {
         target.setCreator("TargetCreator");
         source.setCreator("SourceCreator");
 
-        target = PropertyUtils.entityUpdateMerge(target, source);
+        target = EntityUtils.entityUpdateMerge(target, source);
         System.out.println(target);
     }
 }

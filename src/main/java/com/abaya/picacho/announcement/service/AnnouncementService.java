@@ -25,4 +25,6 @@ public interface AnnouncementService {
     Announcement releaseAnnouncement(Long id, String operator) throws ServiceException;
 
     Announcement callbackAnnouncement(Long id, String operator) throws ServiceException;
+
+    Announcement queryAnnouncementById(Long id);
 }
