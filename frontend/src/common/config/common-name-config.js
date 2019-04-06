@@ -1,5 +1,7 @@
 const commonNames = {
+    inputTypeDatePicker: 'datePicker',
     inputTypeSelect: 'select',
+    inputTypeMultiSelect: 'multiSelect',
     richTextEditor: 'editor',
     fileUploader: 'uploader',
     token: 'token',
@@ -45,6 +47,9 @@ const commonNames = {
     close: 'close',
 
     textButton: 'textButton',
+
+    idleResources: 'idleResourcesQuery',
+    idleAccounts: 'idleAccountsQuery',
 }
 
 export default commonNames

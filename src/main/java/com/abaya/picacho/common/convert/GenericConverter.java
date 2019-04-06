@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Slf4j
 public class GenericConverter implements ConditionalGenericConverter {
-    private final ModelMapper mapper = new ModelMapper();
+    private static final ModelMapper mapper = new ModelMapper();
 
     @Override
     public boolean matches(TypeDescriptor sourceType, TypeDescriptor targetType) {

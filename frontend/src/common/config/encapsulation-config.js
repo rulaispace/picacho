@@ -385,38 +385,68 @@ const boxing = {
         toolbar: {
             feature: {
                 disableGutters: true,
-                showInput: false,
-                showInputIcon: false,
+                showInput: true,
+                showInputIcon: true,
                 showRightButtonGroup: true,
-                type: iconNames.SCHEDULE_DAY_TYPE,
             },
             input: {
-                iconKey: iconNames.filterList,
+                className: 'toolbarDefaultSelect',
+                inputRootClassName: 'toolbarDefaultSelectRoot',
                 placeholder: '选择成员过滤',
-                defaultValue: '',
+                value: '',
             },
         },
         table: {
             feature: {
-                pageable: false,
+                pageable: true,
             },
             pagination: {
             },
             header: [
                 {
-                    id: 'time',
-                    numeric: true,
-                    disablePadding: true,
-                    label: '时间',
-                    width: '8%',
+                    id: 'startTime',
+                    disablePadding: false,
+                    label: '开始时间',
+                    width: '20%',
                 },
                 {
-                    id: 'event',
+                    id: 'finishTime',
                     disablePadding: false,
-                    width: '92%',
+                    label: '结束时间',
+                    width: '20%',
+                },
+                {
+                    id: 'title',
+                    disablePadding: false,
+                    width: '30%',
+                    label: '主题',
+                },
+                {
+                    id: 'participants',
+                    disablePadding: false,
+                    width: '20%',
+                    label: '参加人员',
+                },
+                {
+                    id: 'operator',
+                    label: "操作",
+                    disablePadding: false,
+                    width: '10%',
                     linkable: true,
                 },
             ]
+        },
+        dialog: {
+            open: false,
+            toolbar: {
+                feature: {
+                    showInput: false,
+                    showRightButtonGroup: true,
+                    showLeftButton: true,
+                },
+                leftButton: {id: iconNames.close,}
+            },
+            form: {}
         }
     }
 }

@@ -48,11 +48,11 @@ public class PropertyUtils {
         }
     }
 
-    public static <T> T merge(T target, Object source) {
-        return merge(target, source, null);
+    public static <T> T override(T target, Object source) {
+        return override(target, source, null);
     }
 
-    public static <T> T merge(T target, Object source, String... ignoreProperties) {
+    public static <T> T override(T target, Object source, String... ignoreProperties) {
         Assert.notNull(source, "Source must not be null");
         Assert.notNull(target, "Target must not be null");
 

@@ -169,6 +169,28 @@ export function styles(theme) {
                 width: 300,
             },
         },
+        toolbarDefaultSelect: {
+            position: 'relative',
+            borderRadius: theme.shape.borderRadius,
+            backgroundColor: fade(theme.palette.common.white, 0.15),
+            '&:hover': {
+                backgroundColor: fade(theme.palette.common.white, 0.25),
+            },
+            marginRight: theme.spacing.unit * 2,
+            marginLeft: 0,
+            width: '100%',
+            [theme.breakpoints.up('sm')]: {
+                marginLeft: theme.spacing.unit * 3,
+                width: 'auto',
+            },
+            [theme.breakpoints.up('md')]: {
+                width: 300,
+            },
+        },
+        toolbarDefaultSelectRoot: {
+            color: 'inherit',
+            width: '100%',
+        },
         toolbarDefaultGrow: {
             flex: 1,
             display: 'block',
@@ -318,6 +340,11 @@ export function styles(theme) {
             paddingLeft: theme.spacing.unit*1,
             paddingRight: theme.spacing.unit*1,
             width: '33.3%',
+        },
+        fromMultiSelectTextField: {
+            margin: theme.spacing.unit,
+            minWidth: 120,
+            maxWidth: 300,
         },
         formDefaultDense: {
             marginTop: 19,

@@ -241,7 +241,6 @@ export default class Content extends React.Component {
     }
 
     saveButtonVisible() {
-        console.log(this.store.getState().announcement.mode)
         return this.store.getState().announcement.mode !== commonNames.view
     }
 

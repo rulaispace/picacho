@@ -1,6 +1,6 @@
 package com.abaya.picacho.common.util;
 
-import com.abaya.picacho.org.entity.Organization;
+import com.abaya.picacho.biz.organization.entity.Organization;
 import org.junit.Test;
 
 public class PropertyUtilsTest {
@@ -12,7 +12,7 @@ public class PropertyUtilsTest {
 
         source.setCode("ABCD");
 
-        target = PropertyUtils.merge(target, source);
+        target = PropertyUtils.override(target, source);
         System.out.println(target);
     }
 

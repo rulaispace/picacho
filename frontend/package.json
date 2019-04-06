@@ -29,6 +29,7 @@
     "babel-preset-react": "^6.24.1",
     "circular-json": "^0.5.9",
     "classnames": "^2.2.6",
+    "dateformat": "^3.0.3",
     "draft-js": "^0.10.5",
     "enzyme": "^3.8.0",
     "enzyme-adapter-react-16": "^1.9.1",

@@ -5,12 +5,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Slide from '@material-ui/core/Slide';
 import DefaultToolbar from "../toolbar/default-toolbar";
 import {modifyWithDef} from "../../common/base/store-state-modifier";
-import uuid from 'uuid'
-import commonNames from "../../common/config/common-name-config";
-import MenuItem from "@material-ui/core/es/MenuItem/MenuItem";
-import TextField from "@material-ui/core/TextField";
-import QuillEditor from "../editor/quill-editor";
-import FileUpload from "../upload/file-upload";
+import DefaultFormInput from "./form-input";
 
 const defaultInputHandler = {
     visible: true,
@@ -93,102 +88,6 @@ DefaultFormDialog.unboxing = function(state) {
 
 function Transition(props) {
     return <Slide direction="up" {...props} />;
-}
-
-class DefaultFormInput extends React.Component {
-    constructor(props) {
-        super(props)
-        this.state = props.state
-        this.classes = props.classes
-        this.handler = props.handler
-
-        this.selectionItems = this.selectionItems.bind(this)
-    }
-
-    selectionItems(options) {
-        if (!options) return null
-        console.log(options)
-        return Object.keys(options).forEach(value => {
-            alert(value)
-            return <MenuItem key={uuid.v1()} value={value}>{options[value]}</MenuItem>
-        })
-    }
-
-    render() {
-        if (this.handler.proxy(this.handler.type) === commonNames.inputTypeSelect) {
-            return (
-                <TextField
-                    className={this.classes[this.handler.className]}
-                    InputLabelProps={{
-                        className: this.classes[this.handler.inputClassName]
-                    }}
-                    margin='dense'
-                    disabled={this.handler.proxy(this.handler.disabled)}
-                    error={this.state.error}
-                    label={this.handler.proxy(this.handler.label)}
-                    value={this.handler.proxy(this.handler.value, this.state.value)}
-                    onChange={e=>{this.handler.handleChange(this.handler.id, e.target.value)}}
-                    helperText={this.state.msg}
-                    select={this.handler.proxy(this.handler.type) === commonNames.inputTypeSelect}
-                    SelectProps={{
-                        native: true,
-                        MenuProps: {
-                            className: this.classes[this.handler.selectMenuClassName]
-                        }
-                    }}
-                >
-                    {Object.keys(this.handler.options).map(value => {
-                        return (
-                            <option key={uuid.v1()} value={value}>{this.handler.options[value]}</option>
-                        )
-                    })}
-                </TextField>
-            )
-        } else if (this.handler.proxy(this.handler.type) === commonNames.richTextEditor) {
-            return (
-                <QuillEditor
-                    readOnly={this.handler.proxy(this.handler.disabled)}
-                    label={this.handler.proxy(this.handler.label)}
-                    text={this.handler.proxy(this.handler.value, this.state.value)}
-                    onChange={(value)=>{this.handler.handleChange(this.handler.id, value)}}
-                />
-            )
-        } else if (this.handler.proxy(this.handler.type) === commonNames.fileUploader) {
-            return (
-                <FileUpload
-                    classes={this.classes}
-                    readOnly={this.handler.proxy(this.handler.disabled)}
-                    label={this.handler.proxy(this.handler.label)}
-                    files={this.handler.proxy(this.handler.value, this.state.value)}
-                    uploadUri={this.handler.proxy(this.handler.uploadUri)}
-                    deleteUri={this.handler.proxy(this.handler.deleteUri)}
-                />
-            )
-        } else {
-            return (
-                <TextField
-                    className={this.classes[this.handler.className]}
-                    InputLabelProps={{
-                        className: this.classes[this.handler.inputClassName]
-                    }}
-                    margin='dense'
-                    disabled={this.handler.proxy(this.handler.disabled)}
-                    error={this.state.error}
-                    label={this.handler.proxy(this.handler.label)}
-                    value={this.handler.proxy(this.handler.value, this.state.value)}
-                    onChange={e=>{this.handler.handleChange(this.handler.id, e.target.value)}}
-                    helperText={this.state.msg}
-                >
-                </TextField>
-            )
-        }
-    }
-}
-
-DefaultFormInput.propTypes = {
-    classes: PropTypes.object.isRequired,
-    state: PropTypes.object.isRequired,
-    handler: PropTypes.object.isRequired,
 }
 
 export default DefaultFormDialog

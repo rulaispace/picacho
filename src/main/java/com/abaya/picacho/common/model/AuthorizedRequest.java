@@ -1,6 +1,6 @@
 package com.abaya.picacho.common.model;
 
-import com.abaya.picacho.common.util.ConversionUtils;
+import com.abaya.picacho.common.util.AuthorizeUtils;
 import com.abaya.picacho.common.validation.Auth;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -15,6 +15,6 @@ public class AuthorizedRequest extends ExtensibleEntity {
 
     @JsonIgnore
     public String getOperator() {
-        return ConversionUtils.getUsernameByToken(token);
+        return AuthorizeUtils.getUsernameByToken(token);
     }
 }

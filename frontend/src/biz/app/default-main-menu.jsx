@@ -111,7 +111,7 @@ DefaultMainMenu.propTypes = {
     store: PropTypes.object.isRequired,
 }
 
-DefaultMainMenu.reloading = function(store, name) {
+DefaultMainMenu.reloading = function(store, name, param={}) {
     store.getState().layout.navigator = null;
     let loadingUrl = null;
     for (const property in menuItems.employee.items) {
@@ -130,7 +130,7 @@ DefaultMainMenu.reloading = function(store, name) {
         }
     }
 
-    post(loadingUrl, {}, loadSuccess(store, name), loadFail(store))
+    post(loadingUrl, param, loadSuccess(store, name), loadFail(store))
 }
 
 export default DefaultMainMenu
