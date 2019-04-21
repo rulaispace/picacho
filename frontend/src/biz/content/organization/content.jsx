@@ -162,11 +162,11 @@ export default class Content extends React.Component {
     nestListItemDeactivateAlert(data) {
         this.current = data
 
-        const agreeCallback = function(self, id) {
+        const agreeCallback = function(self, code) {
             return function() {
                 post(self.handlers.dialog.services[commonNames.deactivate],
                     {
-                        username: id,
+                        username: code,
                     },
                     self.updateSuccessfully(),
                     self.updateFailed)
@@ -176,7 +176,7 @@ export default class Content extends React.Component {
         this.store.alert({
             title: '系统提示',
             message: `确认要注销用户【${data.primaryText}】的系统使用权限吗？`,
-            agreeCallback: agreeCallback(this, data.id)
+            agreeCallback: agreeCallback(this, data.code)
         })
     }
     nestListItemProvisionEmployeeAlert(data) {
@@ -193,11 +193,11 @@ export default class Content extends React.Component {
             登录账号：${payload.username}，初始密码：${payload.password}，请将初始密码发送用户并提醒其登录系统！`
         }
 
-        const agreeCallback = function(self, id) {
+        const agreeCallback = function(self, code) {
             return function() {
                 post(self.handlers.dialog.services[commonNames.activate],
                     {
-                        username: id,
+                        username: code,
                         rule: rule,
                     },
                     self.updateSuccessfully(message),
@@ -208,18 +208,18 @@ export default class Content extends React.Component {
         this.store.alert({
             title: '系统提示',
             message: `确认要为用户【${data.primaryText}】开通${rule===commonNames.employee ? '普通用户' : '管理员'}权限吗？`,
-            agreeCallback: agreeCallback(this, data.id)
+            agreeCallback: agreeCallback(this, data.code)
         })
     }
 
     nestListItemDeleteAlert(data) {
         this.current = data
 
-        const agreeCallback = function(self, id) {
+        const agreeCallback = function(self, code) {
             return function() {
                 post(self.handlers.dialog.services[commonNames.delete],
                     {
-                        code: id,
+                        code: code,
                     },
                     self.updateSuccessfully(),
                     self.updateFailed)
@@ -229,7 +229,7 @@ export default class Content extends React.Component {
         this.store.alert({
             title: '系统提示',
             message: `确认要删除节点【${data.primaryText}】吗？`,
-            agreeCallback: agreeCallback(this, data.id)
+            agreeCallback: agreeCallback(this, data.code)
         })
     }
 
