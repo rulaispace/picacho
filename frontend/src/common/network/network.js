@@ -48,8 +48,8 @@ export async function post(api, request, success, fail) {
 
         if (json.status === 200) return success(json.payload)
 
-        return fail({title: `系统错误,url=[${api}]`, detail: json.message})
+        fail({title: `系统提示`, detail: json.message})
     } catch(error) {
-        return fail({title: `系统错误,url=[${api}]`, detail: error.message ? error.message : '系统出现异常，请联系管理员！'})
+        fail({title: `系统错误`, detail: error.message ? error.message : '系统出现异常，请联系管理员！'})
     }
 }

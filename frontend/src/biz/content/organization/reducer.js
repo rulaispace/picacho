@@ -6,7 +6,7 @@ const openAddDialog = function(type) {
         state.mode = commonNames.add
         state.dialog.open = true
         state.dialog.form = ReducerBase.formatFormInput(state.dialog.form, {
-            parentCode: payload.id,
+            parentCode: payload.code,
             parentName: payload.parentName + payload.primaryText + '/',
             path: payload.path + '.N',
             id: '',

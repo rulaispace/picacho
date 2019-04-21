@@ -58,16 +58,6 @@ public class OrganizationController {
 
     @Data
     @NoArgsConstructor
-    static class OrgModifyRequest extends AuthorizedRequest {
-        @NotNull(message = "组织机构编码不能为空！")
-        private String code;
-        private String parentCode;
-        private String name;
-        private String description;
-    }
-
-    @Data
-    @NoArgsConstructor
     static class OrgDeleteRequest extends AuthorizedRequest {
         @NotNull(message = "组织机构编码不能为空！")
         private String code;
@@ -128,6 +118,17 @@ public class OrganizationController {
     @PostMapping(value = "org/query")
     public Response<OrgNode> queryOrganization(@Valid @RequestBody AuthorizedRequest request) throws ServiceException {
         return Response.success(service.queryOrganizationAsTree());
+    }
+
+    @Data
+    @NoArgsConstructor
+    static class OrgModifyRequest extends AuthorizedRequest {
+        @NotNull(message = "修改时，必须传入数据主键")
+        private Long id;
+        private String code;
+        private String parentCode;
+        private String name;
+        private String description;
     }
 
     @CrossOrigin

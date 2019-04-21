@@ -152,8 +152,6 @@ class LoginDialog extends React.Component {
         localStorage.setItem(commonNames.rule, payload[commonNames.rule])
         this.closeCallback()
 
-        alert(localStorage.getItem(commonNames.username))
-
         this.state.loginCallback()
     }
 

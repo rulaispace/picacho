@@ -1,9 +1,8 @@
 package com.abaya.picacho.biz.organization.service.impl;
 
-import com.abaya.picacho.common.exception.ServiceException;
-import com.abaya.picacho.common.model.CommonState;
-import com.abaya.picacho.common.util.EntityUtils;
-import com.abaya.picacho.common.util.RandomUtils;
+import com.abaya.picacho.biz.account.entity.Account;
+import com.abaya.picacho.biz.account.model.RuleType;
+import com.abaya.picacho.biz.account.service.AccountService;
 import com.abaya.picacho.biz.organization.entity.Organization;
 import com.abaya.picacho.biz.organization.model.OrgNode;
 import com.abaya.picacho.biz.organization.model.OrgType;
@@ -11,12 +10,16 @@ import com.abaya.picacho.biz.organization.repository.OrganizationRepository;
 import com.abaya.picacho.biz.organization.service.OrganizationAidService;
 import com.abaya.picacho.biz.organization.service.OrganizationConvertService;
 import com.abaya.picacho.biz.organization.service.OrganizationService;
-import com.abaya.picacho.biz.account.entity.Account;
-import com.abaya.picacho.biz.account.model.RuleType;
-import com.abaya.picacho.biz.account.service.AccountService;
+import com.abaya.picacho.common.exception.ServiceException;
+import com.abaya.picacho.common.model.CommonState;
+import com.abaya.picacho.common.util.EntityUtils;
+import com.abaya.picacho.common.util.RandomUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
+
+import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 public class OrganizationServiceImpl implements OrganizationService {
@@ -38,15 +41,15 @@ public class OrganizationServiceImpl implements OrganizationService {
     }
 
     @Override
+    @Transactional
     public Organization updateOrganization(Organization organization) throws ServiceException {
         Assert.notNull(organization, "传入的组织机构不能为空");
 
-        String code = organization.getCode();
-        Assert.notNull(code, "传入的组织机构编码不能为空");
+        Long id = organization.getId();
+        Assert.notNull(id, "传入的组织机构主键不能为空");
 
-        Organization origin = repository.findByCodeIgnoreCase(code);
-        if (origin == null) throw new ServiceException("组织机构（%s）不存在，请确认请求参数是否正确", code);
-
+        Organization origin = repository.findById(id).orElse(new Organization());
+        if (origin.getId() == null) throw new ServiceException("组织机构（%s）不存在，请确认请求参数是否正确", id);
 
         String parentCode = organization.getParentCode();
         if (parentCode != null && parentCode.trim().length() != 0 && !aidService.isDepartmentCode(parentCode))
@@ -55,7 +58,26 @@ public class OrganizationServiceImpl implements OrganizationService {
         if (organization.getType() != null && organization.getType() != origin.getType())
             throw new ServiceException("组织结构类型不可修改！");
 
+        if (shouldUpdateCode(organization.getCode(), origin.getCode())) updateChildrenParentCode(organization.getCode(), origin.getCode());
+
         return repository.save(EntityUtils.entityUpdateMerge(origin, organization));
+    }
+
+    private boolean shouldUpdateCode(String target, String origin) throws ServiceException {
+        if (target == null) return false;
+        if (origin == null) throw new ServiceException("系统内部数据异常，找到机构组织编码为空的数据！");
+
+        if (origin.equals(target)) return false;
+
+        // 确认以target为组织机构编码的数据，在当前数据库中不存在
+        if (repository.findByCodeIgnoreCase(target) != null) throw new ServiceException("组织机构编码(%s)已被使用！", target);
+        return true;
+    }
+
+    private void updateChildrenParentCode(String target, String origin) {
+        List<Organization> children = repository.findByParentCode(origin);
+        children.forEach(organization -> organization.setParentCode(target));
+        repository.saveAll(children);
     }
 
     @Override

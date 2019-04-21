@@ -8,6 +8,8 @@ import commonNames from "../../../common/config/common-name-config";
 import Tooltip from "@material-ui/core/Tooltip";
 
 export default function ListRightButtonGroup({state, classes, handlers}) {
+    if (commonNames.admin !== localStorage.getItem(commonNames.rule)) return null;
+
     if (state.type === commonNames.department) {
         return (
             <ListItemSecondaryAction>

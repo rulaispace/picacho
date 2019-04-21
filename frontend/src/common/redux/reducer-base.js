@@ -91,7 +91,7 @@ const decorate = function(children, path, target, parentCode, parentName) {
         decorate(children[property].children,
             children[property].path,
             target,
-            children[property].id,
+            children[property].code,
             parentName + children[property].primaryText + '/',
         )
     }

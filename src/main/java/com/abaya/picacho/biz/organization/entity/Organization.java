@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Data
 @Entity
 public class Organization extends EntityBase {
-    private int level;
+    private Integer level;
 
     @Column(unique=true)
     private String code;

@@ -12,31 +12,43 @@ import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListSubheader from '@material-ui/core/ListSubheader'
-import menuItems from "../../common/config/menu-items-config";
+import mainMenu from "../../common/config/main-menu-config";
 import {post} from '../../common/network/network'
 import StoreFactory from "../../common/redux/store-factory";
 import commonNames from "../../common/config/common-name-config";
 
-function DefaultMenuList({state, onClick}) {
-    const {header, items} = state
+function DefaultMenuList({onClick}) {
+    const {header, items} = mainMenu
     return (
         <div>
             {header ? (<ListSubheader inset>{header}</ListSubheader>) : null}
-            {items.map(({id, label, loadingUrl}) => (
-                <ListItem
-                    button
-                    key={id}
-                    onClick={(e) => {
-                        e.preventDefault()
-                        onClick(id, loadingUrl)
-                    }}
-                >
-                    <ListItemIcon>
-                        <IconStore iconKey={id}/>
-                    </ListItemIcon>
-                    <ListItemText  primary={label}/>
-                </ListItem>
-            ))}
+            {
+                items.filter(
+                    ({rule}) => {
+                        if (commonNames.admin === localStorage.getItem(commonNames.rule))
+                            return true;
+                        if (localStorage.getItem(commonNames.rule) == null)
+                            return false;
+
+                        return rule === commonNames.employee;
+                    }
+                ).map(({id, label, loadingUrl}) => (
+                    <ListItem
+                        button
+                        key={id}
+                        onClick={(e) => {
+                            e.preventDefault()
+                            onClick(id, loadingUrl)
+                        }}
+                    >
+                        <ListItemIcon>
+                            <IconStore iconKey={id}/>
+                        </ListItemIcon>
+                        <ListItemText  primary={label}/>
+                    </ListItem>
+                ))
+
+            }
         </div>
     )
 }
@@ -89,19 +101,7 @@ function DefaultMainMenu({classes, store}) {
                 </IconButton>
             </div>
             <Divider />
-            {(commonNames.admin === localStorage.getItem(commonNames.rule) || commonNames.employee === localStorage.getItem(commonNames.rule)) ? (
-                <DefaultMenuList
-                    state={menuItems.employee}
-                    onClick={loading(store)}
-                />) : null
-            }
-            { commonNames.admin === localStorage.getItem(commonNames.rule) ? (<Divider />) : null}
-            { commonNames.admin === localStorage.getItem(commonNames.rule) ? (
-                <DefaultMenuList
-                    state={menuItems.administrator}
-                    onClick={loading(store)}
-                />) : null
-            }
+            <DefaultMenuList onClick={loading(store)}/>
         </Drawer>
     )
 }
@@ -114,19 +114,10 @@ DefaultMainMenu.propTypes = {
 DefaultMainMenu.reloading = function(store, name, param={}) {
     store.getState().layout.navigator = null;
     let loadingUrl = null;
-    for (const property in menuItems.employee.items) {
-        if (menuItems.employee.items[property].id === name) {
-            loadingUrl = menuItems.employee.items[property].loadingUrl
+    for (const property in mainMenu.items) {
+        if (mainMenu.items[property].id === name) {
+            loadingUrl = mainMenu.items[property].loadingUrl
             break
-        }
-    }
-
-    if (loadingUrl == null) {
-        for (const property in menuItems.administrator.items) {
-            if (menuItems.administrator.items[property].id === name) {
-                loadingUrl = menuItems.administrator.items[property].loadingUrl
-                break
-            }
         }
     }
 

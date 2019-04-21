@@ -123,10 +123,13 @@ export default class Content extends React.Component {
                         label: (state) => (commonNames.department == Any.get(state.form, 'type') ? '上级部门' : '所属部门'),
                         disabled: true,
                     },
-                    id: {
+                    code: {
                         label: (state) => (commonNames.department == Any.get(state.form, 'type') ? '组织机构编码' : '登录账户名'),
                         disabled: function(store) {
-                            return () => !(store.getState().organization.mode === commonNames.add)
+                            return () => {
+                                const formData = store.getState().organization.dialog.form;
+                                return !(Any.get(formData, "state") !== commonNames.valid)
+                            }
                         }(this.store),
                         className: 'formDefaultTextField3',
                         handleChange: this.formInputChanged,
@@ -233,26 +236,27 @@ export default class Content extends React.Component {
 
 
     nestedListItemAddPerson(data) {
-        const {id, path, level, type, primaryText, secondaryText, parentCode, parentName} = data
-        this.store.dispatch(reducer.createAction(reducer.types.openAddPersonDialog, {id, path, level, type, primaryText, secondaryText, parentCode, parentName}))
+        const {id, code, path, level, type, primaryText, secondaryText, parentCode, parentName, state} = data
+        this.store.dispatch(reducer.createAction(reducer.types.openAddPersonDialog, {id, code, path, level, type, primaryText, secondaryText, parentCode, parentName, state}))
     }
 
     nestedListItemAddGroup(data) {
-        const {id, path, level, type, primaryText, secondaryText, parentCode, parentName} = data
-        this.store.dispatch(reducer.createAction(reducer.types.openAddGroupDialog, {id, path, level, type, primaryText, secondaryText, parentCode, parentName}))
+        const {id, code, path, level, type, primaryText, secondaryText, parentCode, parentName, state} = data
+        this.store.dispatch(reducer.createAction(reducer.types.openAddGroupDialog, {id, code, path, level, type, primaryText, secondaryText, parentCode, parentName, state}))
     }
 
     nestedListItemEdit(data) {
-        const {id, path, level, type, primaryText, secondaryText, parentCode, parentName} = data
-        this.store.dispatch(reducer.createAction(reducer.types.openEditDialog, {id, path, level, type, primaryText, secondaryText, parentCode, parentName}))
+        const {id, code, path, level, type, primaryText, secondaryText, parentCode, parentName, state} = data
+        this.store.dispatch(reducer.createAction(reducer.types.openEditDialog, {id, code, path, level, type, primaryText, secondaryText, parentCode, parentName, state}))
     }
 
     nestedListItemSave() {
         const record = DefaultFormDialog.unboxing(this.store.getState().organization.dialog.form)
         post(this.handlers.dialog.services[this.store.getState().organization.mode],
             {
+                id: record.id,
+                code: record.code,
                 parentCode: record.parentCode,
-                code: record.id,
                 name: record.primaryText,
                 type: record.type,
                 description: record.secondaryText
@@ -284,7 +288,7 @@ export default class Content extends React.Component {
     updateFailed(err) {
         this.store.tip({
             title: err.title,
-            message: err.details,
+            message: err.detail,
         })
         this.current = null;
     }
